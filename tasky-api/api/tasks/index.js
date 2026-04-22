@@ -2,7 +2,14 @@ import express from 'express';
 import Task from './taskModel';
 import asyncHandler from 'express-async-handler';
 
+
 const router = express.Router(); // eslint-disable-line
+
+router.post('/', asyncHandler(async (req, res) => {
+    const task = await Task(req.body).save();
+    res.status(201).json(task);
+}));
+
 
 // Get all tasks
 router.get('/', async (req, res) => {
@@ -11,10 +18,10 @@ router.get('/', async (req, res) => {
 });
 
 // create a task
-router.post('/', asyncHandler(async (req, res) => {
+router.post('/', async (req, res) => {
     const task = await Task(req.body).save();
     res.status(201).json(task);
-}));
+});
 
 // Update Task
 router.put('/:id', async (req, res) => {
@@ -42,6 +49,5 @@ router.delete('/:id', async (req, res) => {
 });
 
 
-
- 
 export default router;
+
