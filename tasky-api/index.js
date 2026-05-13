@@ -18,6 +18,7 @@ const errHandler = (err, req, res, next) => {
 };
 
 
+
 const app = express();
 
 // Enable CORS for all requests
@@ -33,6 +34,7 @@ app.use(express.json());
 app.use('/api/tasks', tasksRouter);
 
 app.use(errHandler);
+
 
 
 app.listen(port, () => {
