@@ -6,6 +6,7 @@ import tasksRouter from './api/tasks';
 import cors from 'cors';
 //... other imports
 import usersRouter from './api/users';
+import authenticate from './authenticate';
 
 
 
@@ -41,6 +42,7 @@ app.use(errHandler);
 //Users router
 app.use('/api/users', usersRouter);
 
+app.use('/api/tasks', authenticate, tasksRouter);
 
 
 
