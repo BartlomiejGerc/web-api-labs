@@ -21,10 +21,22 @@ router.post('/', asyncHandler(async (req, res) => {
             return res.status(400).json({ success: false, msg: 'Username and password are required.' });
         }
         if (req.query.action === 'register') {
-            await registerUser(req, res);
-        } else {
-            await authenticateUser(req, res);
-        }
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!%*?&])[A-Za-z\d$!%*?&]{8,}$/;
+
+    if (!passwordRegex.test(req.body.password)) {
+        return res.status(400).json({
+            code: 400,
+            msg: 'Password must be at least 8 characters and include one uppercase letter, one lowercase letter, one number, and one special character.'
+        });
+    }
+
+    await User(req.body).save();
+
+    res.status(201).json({
+        code: 201,
+        msg: 'Successful created new user.',
+    });
+}
     } catch (error) {
         // Log the error and return a generic error message
         console.error(error);
