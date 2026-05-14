@@ -1,21 +1,45 @@
-import { Link } from "react-router";
+import { useContext, useState } from "react";
+import { Navigate } from "react-router";
+import { AuthContext } from '../contexts/authContext';
 
-const LoginPage = () => {
+const SignUpPage = () => {
+  const context = useContext(AuthContext)
+  const [userName, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordAgain, setPasswordAgain] = useState("");
+  const [registered, setRegistered] = useState(false);
+  
+  const register = async () => {
+    let passwordRegEx = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+    const validPassword = passwordRegEx.test(password);
 
-    return (
-        <>
-            <h2>Login page</h2>
-            <p>You must log in to view the protected pages </p>
-            
-            <input id="username" placeholder="user name"></input><br />
-            <input id="password" type="password" placeholder="password"></input><br />
-            {/* Login web form  */}
-            <button>Log in</button>
-            
-            <p>Not Registered?
-                <Link to="/signup">Sign Up!</Link></p>
-        </>
-    );
+    if (validPassword && password === passwordAgain) {
+      let result = await context.register(userName, password);
+      setRegistered(result);
+    }
+  }
+
+  if (registered === true) {
+    return <Navigate to="/login" />;
+  }
+
+  return (
+    <>
+      <h2>SignUp page</h2>
+      <p>You must register a username and password to log in. Usernames must be unique and passwords must contain a minimum of 8 characters (with at least one uppercase letter, one lowercase letter, and one symbol). </p>
+      <input value={userName} placeholder="user name" onChange={e => {
+        setUserName(e.target.value);
+      }}></input><br />
+      <input value={password} type="password" placeholder="password" onChange={e => {
+        setPassword(e.target.value);
+      }}></input><br />
+      <input value={passwordAgain} type="password" placeholder="password again" onChange={e => {
+        setPasswordAgain(e.target.value);
+      }}></input><br />
+      {/* Login web form  */}
+      <button onClick={register}>Register</button>
+    </>
+  );
 };
 
-export default LoginPage;
+export default SignUpPage;
