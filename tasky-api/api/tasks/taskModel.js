@@ -18,9 +18,11 @@ const TaskSchema = new Schema({
 });
 
 const dateValidator = (date) => {
+  if (!date) return false;
   return date > new Date();
-}
-TaskSchema.path("deadline").validate(dateValidator);
+};
+
+TaskSchema.path("deadline").validate(dateValidator, 'Deadline must be a future date');
 
 
 export default mongoose.model('Task', TaskSchema);

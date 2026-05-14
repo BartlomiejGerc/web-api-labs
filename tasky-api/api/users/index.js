@@ -22,9 +22,9 @@ router.post('/', asyncHandler(async (req, res) => {
 
   if (req.query.action === 'register') {
     return registerUser(req, res);
-  } else {
-    return authenticateUser(req, res);
   }
+
+  return authenticateUser(req, res);
 }));
 
 async function registerUser(req, res) {
@@ -39,7 +39,7 @@ async function registerUser(req, res) {
 
   await User.create(req.body);
 
-  res.status(201).json({
+  return res.status(201).json({
     success: true,
     msg: 'User successfully created.'
   });
@@ -65,11 +65,14 @@ async function authenticateUser(req, res) {
   }
 
   const token = jwt.sign(
-    { username: user.username },
+    {
+      username: user.username,
+      _id: user._id
+    },
     process.env.SECRET
   );
 
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     token: 'BEARER ' + token
   });

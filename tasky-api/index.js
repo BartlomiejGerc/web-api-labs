@@ -35,7 +35,7 @@ app.use(express.static('public'));
 
 app.use(express.json());
 
-app.use('/api/tasks', tasksRouter);
+app.use('/api/tasks', authenticate, tasksRouter);
 
 app.use(errHandler);
 

@@ -59,14 +59,27 @@ function TasksPage() {
     setFormState(form);
   }
 
-  const formSubmitHandler = async (event) => {
-    event.preventDefault();
-    const tasks = taskState.tasks?[...taskState.tasks]:[];
-    const form = {...formState};
-    const newTask = await addTask(form);
-    tasks.push(newTask);
-    setTaskState({tasks});
-  }
+const formSubmitHandler = async (event) => {
+  event.preventDefault();
+
+  const tasks = taskState.tasks ? [...taskState.tasks] : [];
+
+  const form = {
+    ...formState,
+    priority: formState.priority || "Low",
+    done: false,
+    deadline: formState.deadline
+  };
+
+  console.log("TASK BEING SENT:", form);
+
+  const newTask = await addTask(form);
+
+  console.log("TASK CREATED:", newTask);
+
+  tasks.push(newTask);
+  setTaskState({ tasks });
+}
   
   return (
     <>
@@ -82,6 +95,7 @@ function TasksPage() {
           deleteTask = {() => deleteHandler(index)}
         />
       ))}
+      
       <AddTaskForm submit={formSubmitHandler} change={formChangeHandler} />
     </>
   );
